@@ -9,7 +9,7 @@ require('any-promise/register/bluebird');
 let Promise = require('any-promise');
 let ProgressBar = require('progress');
 let getopt = new Getopt([
-	['r', '', 'Rename pictures to format YYYY-MM-DD HH:mm:ss'],
+	['r', '', 'Rename pictures to format YYYY-MM-DD HH-mm-ss'],
 	['d', 'dst=path/to/destination/folder', 'Path where to store renamed pictures'],
 	['v', 'verbose', 'Enable log messages'],
 	['h', 'help']
