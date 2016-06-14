@@ -40,7 +40,7 @@ if (!fs.existsSync(srcFolder)) {
 let images = fs.readdirSync(srcFolder);
 
 console.info('Number of items in folder: ' + images.length);
-let bar = new ProgressBar(':image [:bar] :current/:total :percent :etas', {total: images.length, width: 20});
+let bar = new ProgressBar('[:bar] :current/:total :percent :etas \t :image', {total: images.length, width: 20});
 let functions = [];
 opt.options.r && functions.push(require('./lib/rename'));
 
@@ -59,12 +59,13 @@ Promise.each(
 				return prev.then(cur(srcFolder, opt.options, showLogs));
 			},
 			Promise.props({
-				img: Jimp
-					.read(imgPath)
-					.then(img => {
-						showLogs && console.log(`Image ${imgPath} loaded.`);
-						return img;
-					}),
+				img: Promise.resolve(imgPath),
+				//img: Jimp
+				//	.read(imgPath)
+				//	.then(img => {
+				//		showLogs && console.log(`Image ${imgPath} loaded.`);
+				//		return img;
+				//	}),
 				exifData: new Promise((resolve, reject) => {
 					new ExifImage({image: imgPath}, (error, exifData) => {
 						showLogs && console.log('ExifData', exifData);
