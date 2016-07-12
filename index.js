@@ -56,7 +56,10 @@ Promise.each(
 	image => {
 		let imgPath = path.join(srcFolder, image);
 		return functions.reduce((prev, cur)=> {
-				return prev.then(cur(srcFolder, opt.options, showLogs));
+				return prev.then(function(data){
+					if (!data || data.exifData == null) return data;
+					return cur(srcFolder, opt.options, showLogs)(data);
+				});
 			},
 			Promise.props({
 				img: Promise.resolve(imgPath),
@@ -70,7 +73,8 @@ Promise.each(
 					new ExifImage({image: imgPath}, (error, exifData) => {
 						showLogs && console.log('ExifData', exifData);
 						if (error) {
-							return reject(error);
+							console.error(error);
+							return resolve(null);
 						}
 						exifData.imageName = image;
 						resolve(exifData);
@@ -89,5 +93,5 @@ Promise.each(
 		process.exit(0);
 	})
 	.catch(err => {
-		console.error(err);
+		console.error(err.stack);
 	});
